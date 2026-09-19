@@ -1,0 +1,18 @@
+name: Validate audit
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run regression tests
+        run: python -m unittest discover -s analysis -p 'test_*.py'
+      - name: Validate sanitized dataset
+        run: python analysis/funnel_audit.py --check
